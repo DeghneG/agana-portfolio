@@ -117,8 +117,11 @@ function wiggle(el, name) {
   }
 }
 
-export function ReactButton({ LikeIcon }) {
-  const [sel, setSel] = useState(null)
+// compact + value/onChange: text-style Like for comments, state owned by the caller
+export function ReactButton({ LikeIcon, compact = false, value, onChange }) {
+  const [own, setOwn] = useState(null)
+  const sel = onChange ? value ?? null : own
+  const setSel = onChange || setOwn
   const [show, setShow] = useState(false)
   const [hov, setHov] = useState(null)
   const bar = useRef(null)
@@ -154,10 +157,10 @@ export function ReactButton({ LikeIcon }) {
   }
   const r = REACTIONS.find((x) => x.k === sel)
   return (
-    <div className="relative" onMouseEnter={openSoon} onMouseLeave={closeSoon}>
+    <div className={compact ? 'relative inline-block' : 'relative'} onMouseEnter={openSoon} onMouseLeave={closeSoon}>
       {show && (
         <div ref={bar} onMouseEnter={() => clearTimeout(t.current)} onMouseLeave={() => setHov(null)}
-          className="absolute bottom-full left-0 mb-2 flex items-end gap-1 px-2 py-1.5 rounded-full bg-white shadow-[0_2px_16px_rgba(0,0,0,.28)] z-30">
+          className={`absolute bottom-full left-0 ${compact ? 'mb-1' : 'mb-2'} flex items-end gap-1 px-2 py-1.5 rounded-full bg-white shadow-[0_2px_16px_rgba(0,0,0,.28)] z-30`}>
           {REACTIONS.map((x, i) => (
             <div key={x.k} data-rx className="relative" onMouseEnter={() => setHov(i)}>
               {hov === i && <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-full bg-black/80 text-white text-[12px] font-semibold whitespace-nowrap pointer-events-none">{x.k}</span>}
@@ -166,10 +169,16 @@ export function ReactButton({ LikeIcon }) {
           ))}
         </div>
       )}
-      <button onClick={() => (sel ? setSel(null) : setSel('Like'))} style={r ? { color: r.c } : undefined}
-        className="w-full h-9 rounded-md hover:bg-fb-hover flex items-center justify-center gap-2">
-        {r ? <span ref={btnIcon} className="inline-block"><ReactionIcon name={r.k} size={22} /></span> : <LikeIcon size={20} />}{r ? r.k : 'Like'}
-      </button>
+      {compact ? (
+        <button onClick={() => (sel ? setSel(null) : setSel('Like'))} style={r ? { color: r.c } : undefined} className="hover:underline">
+          {r ? r.k : 'Like'}
+        </button>
+      ) : (
+        <button onClick={() => (sel ? setSel(null) : setSel('Like'))} style={r ? { color: r.c } : undefined}
+          className="w-full h-9 rounded-md hover:bg-fb-hover flex items-center justify-center gap-2">
+          {r ? <span ref={btnIcon} className="inline-block"><ReactionIcon name={r.k} size={22} /></span> : <LikeIcon size={20} />}{r ? r.k : 'Like'}
+        </button>
+      )}
     </div>
   )
 }

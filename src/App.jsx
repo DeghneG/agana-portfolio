@@ -4,7 +4,7 @@ import * as I from './icons'
 import { profile, projects, stack, experience, setup, cert, gmail } from './data'
 import gsap from 'gsap'
 import { Menu, Toaster, toast } from './ui'
-import { ReactButton, ReactionDefs } from './reactions'
+import { ReactButton, ReactionDefs, ReactionIcon } from './reactions'
 
 import { openLightbox, PhotoGrid, Lightbox, Placeholder, Media } from './photos'
 const VOXPOP = 'https://drive.google.com/drive/folders/1bm8Vd7Vs6M1Ly5LtBYJHR4ogylO8cDbY'
@@ -217,7 +217,7 @@ const GuestAvatar = ({ size = 32 }) => (
 
 function Comments({ list, save }) {
   if (!list.length) return null
-  const toggleLike = (id) => save(list.map((c) => (c.id === id ? { ...c, liked: !c.liked } : c)))
+  const react = (id, k) => save(list.map((c) => (c.id === id ? { ...c, reaction: k, liked: undefined } : c)))
   const remove = (id) => save(list.filter((c) => c.id !== id))
   return (
     <div className="px-4 pt-2 flex flex-col gap-2">
@@ -225,12 +225,15 @@ function Comments({ list, save }) {
         <div key={c.id} className="flex gap-2 items-start">
           <GuestAvatar />
           <div className="min-w-0">
-            <div className="inline-block max-w-full bg-fb-bg rounded-2xl px-3 py-2">
+            <div className="relative inline-block max-w-full bg-fb-bg rounded-2xl px-3 py-2">
               <div className="font-semibold text-[13px] leading-tight">You</div>
               <div className="text-[15px] break-words whitespace-pre-wrap">{c.text}</div>
+              {(c.reaction || c.liked) && (
+                <span className="absolute -bottom-2 -right-2 rounded-full bg-white p-px shadow"><ReactionIcon name={c.reaction || 'Like'} size={16} /></span>
+              )}
             </div>
-            <div className="flex gap-3 px-3 mt-0.5 text-[12px] font-semibold text-fb-sub">
-              <button onClick={() => toggleLike(c.id)} className={c.liked ? 'text-fb-blue' : 'hover:underline'}>{c.liked ? 'Liked' : 'Like'}</button>
+            <div className="flex gap-3 px-3 mt-1 text-[12px] font-semibold text-fb-sub">
+              <ReactButton compact LikeIcon={I.Like} value={c.reaction || (c.liked ? 'Like' : null)} onChange={(k) => react(c.id, k)} />
               <button onClick={() => remove(c.id)} className="hover:underline">Delete</button>
               <span className="font-normal">{ago(c.at)}</span>
             </div>
@@ -498,6 +501,9 @@ export default function App() {
         <LeftCol setTab={setTab} />
         <section className="min-w-0">{right}</section>
       </main>
+      <footer className="max-w-[1212px] mx-auto px-3 sm:px-0 pt-2 pb-8 text-center text-[13px] text-fb-sub">
+        For school project purposes only. This site is a Facebook-style design for a student portfolio and is not affiliated with Facebook or Meta.
+      </footer>
     </div>
   )
 }
