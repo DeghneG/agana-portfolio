@@ -50,10 +50,28 @@ function Header({ tab, setTab }) {
   const tabs = ['All', 'Projects', 'Tech Stack', 'Experience', 'Set up', 'Contacts']
   return (
     <div className="bg-white shadow-[0_1px_2px_rgba(0,0,0,.2)]">
+      <div className="max-w-[1250px] mx-auto">
+        <div className="relative aspect-[1250/460] max-h-[460px] w-full overflow-hidden rounded-b-xl bg-[#a3d3b1]">
+          <img src="/cover.jpg" alt="Cover" className="absolute inset-0 w-full h-full object-cover" />
+          <a href="https://gab-io.vercel.app" target="_blank" rel="noreferrer"
+            className="absolute bottom-4 right-4 h-9 px-3 rounded-md bg-white text-fb-text font-semibold text-[15px] flex items-center gap-2 hover:bg-[#f2f2f2] shadow">
+            <I.Globe size={18} />
+            View personal portfolio
+          </a>
+        </div>
+      </div>
       <div className="max-w-[1212px] mx-auto px-3 sm:px-0">
         <div className="pt-3 pb-4 flex flex-col sm:flex-row gap-5 sm:items-start">
-          <div className="relative shrink-0 w-[168px] h-[168px] rounded-full border-[3px] border-white shadow-[0_0_0_1px_#ddd] overflow-hidden bg-gray-200 mt-1 sm:ml-[14px]">
-            <img src="/profile.jpg" alt="Deghne Gabriel" className="w-full h-full object-cover object-[center_15%]" />
+          <div className="relative shrink-0 mt-1 sm:ml-[14px]">
+            <a href={gmail('Hello Deghne', 'Hi Deghne,\n\n')} target="_blank" rel="noreferrer" aria-label="Share a thought"
+              className="absolute -top-[52px] left-0 z-10 px-4 py-2.5 rounded-full bg-white shadow-[0_1px_6px_rgba(0,0,0,.25)] text-fb-sub text-[13px] whitespace-nowrap hover:bg-[#f5f5f5]">
+              Share a thought...
+              <span className="absolute -bottom-2 left-[46px] w-3 h-3 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,.2)]" />
+              <span className="absolute -bottom-3.5 left-[52px] w-1.5 h-1.5 rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,.2)]" />
+            </a>
+            <div className="w-[168px] h-[168px] rounded-full border-[3px] border-white shadow-[0_0_0_1px_#ddd] overflow-hidden bg-gray-200 mt-1">
+              <img src="/profile.jpg" alt="Deghne Gabriel" className="w-full h-full object-cover object-[center_15%]" />
+            </div>
           </div>
           <div className="flex-1 flex flex-col sm:flex-row gap-3 justify-between sm:pt-4">
             <div>
