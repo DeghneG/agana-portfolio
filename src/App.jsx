@@ -16,6 +16,7 @@ const MIDTERM = [
 ]
 const FINALS = [
   { src: '/mml/finals-1.mp4', video: true, label: 'Desktop 2026.11.08 - 16.15.32.01' },
+  { src: '/mml/stop-motion.mp4', video: true, label: 'Stop Motion Video' },
 ]
 const MML_MEDIA = { Midterm: MIDTERM, Finals: FINALS }
 const mmlPhotos = (t) => Array.from({ length: t === 'Midterm' ? MIDTERM.length : 11 }, (_, k) => (
