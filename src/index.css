@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@theme {
+  --color-fb-bg: #f0f2f5;
+  --color-fb-blue: #0866ff;
+  --color-fb-text: #050505;
+  --color-fb-sub: #65676b;
+  --color-fb-btn: #e4e6eb;
+  --color-fb-hover: #f2f2f2;
+  --font-fb: "Segoe UI Historic","Segoe UI",Helvetica,Arial,sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { margin:0; background:var(--color-fb-bg); color:var(--color-fb-text); font-family:var(--font-fb); font-size:15px; }
+.card { background:#fff; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.2); }
+.reveal { opacity:0; transform:translateY(32px); transition:opacity 1.1s cubic-bezier(.22,1,.36,1), transform 1.1s cubic-bezier(.22,1,.36,1); }
+.reveal.in { opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){ .reveal{opacity:1;transform:none;transition:none} }

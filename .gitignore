@@ -1,0 +1,6 @@
+node_modules
+dist
+.DS_Store
+*.log
+# originals (site uses the compressed copies in public/mml and public/profile.jpg)
+public/picture/
