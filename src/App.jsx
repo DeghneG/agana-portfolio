@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import useReveal from './useReveal'
 import * as I from './icons'
 import { profile, projects, stack, experience, setup, cert, gmail } from './data'
@@ -180,18 +180,80 @@ function Composer({ setTab }) {
   )
 }
 
+const ago = (t) => {
+  const s = Math.floor((Date.now() - t) / 1000)
+  if (s < 60) return 'Just now'
+  if (s < 3600) return `${Math.floor(s / 60)}m`
+  if (s < 86400) return `${Math.floor(s / 3600)}h`
+  return `${Math.floor(s / 86400)}d`
+}
+
+// Temporary comments, saved in this browser only (localStorage)
+function useComments(id) {
+  const key = `comments:${id}`
+  const [list, setList] = useState(() => {
+    try { return JSON.parse(localStorage.getItem(key)) || [] } catch { return [] }
+  })
+  const save = (next) => {
+    setList(next)
+    try { localStorage.setItem(key, JSON.stringify(next)) } catch { /* storage unavailable */ }
+  }
+  return [list, save]
+}
+
+// Facebook's default avatar: grey-blue tile, white head and shoulders
+const GuestAvatar = ({ size = 32 }) => (
+  <svg viewBox="0 0 100 100" width={size} height={size} className="shrink-0 rounded-full block" aria-label="Guest">
+    <defs>
+      <linearGradient id="gavatar-body" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stopColor="#ffffff" /><stop offset="1" stopColor="#eef0f3" />
+      </linearGradient>
+    </defs>
+    <rect width="100" height="100" fill="#c9ccd1" />
+    <ellipse cx="50" cy="43" rx="15.5" ry="18" fill="#fff" />
+    <path d="M16 112V86c0-12 9-20 20-20h28c11 0 20 8 20 20v26z" fill="url(#gavatar-body)" />
+  </svg>
+)
+
+function Comments({ list, save }) {
+  if (!list.length) return null
+  const toggleLike = (id) => save(list.map((c) => (c.id === id ? { ...c, liked: !c.liked } : c)))
+  const remove = (id) => save(list.filter((c) => c.id !== id))
+  return (
+    <div className="px-4 pt-2 flex flex-col gap-2">
+      {list.map((c) => (
+        <div key={c.id} className="flex gap-2 items-start">
+          <GuestAvatar />
+          <div className="min-w-0">
+            <div className="inline-block max-w-full bg-fb-bg rounded-2xl px-3 py-2">
+              <div className="font-semibold text-[13px] leading-tight">You</div>
+              <div className="text-[15px] break-words whitespace-pre-wrap">{c.text}</div>
+            </div>
+            <div className="flex gap-3 px-3 mt-0.5 text-[12px] font-semibold text-fb-sub">
+              <button onClick={() => toggleLike(c.id)} className={c.liked ? 'text-fb-blue' : 'hover:underline'}>{c.liked ? 'Liked' : 'Like'}</button>
+              <button onClick={() => remove(c.id)} className="hover:underline">Delete</button>
+              <span className="font-normal">{ago(c.at)}</span>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function Post({ post, onHide }) {
-  const [commentOpen, setCommentOpen] = useState(false)
   const [text, setText] = useState('')
+  const [list, saveComments] = useComments(post.id)
+  const input = useRef(null)
   const copyLink = () => {
     const url = `${location.origin}/#${post.id}`
     navigator.clipboard?.writeText(url).then(() => toast('Link copied to clipboard'), () => toast(url))
   }
   const send = (e) => {
     e.preventDefault()
-    if (!text.trim()) return
-    location.href = gmail("Comment on: " + post.title, text)
-    toast('Opening your email app to send your comment')
+    const t = text.trim()
+    if (!t) return
+    saveComments([...list, { id: Date.now(), text: t, at: Date.now(), liked: false }])
     setText('')
   }
   return (
@@ -217,12 +279,13 @@ function Post({ post, onHide }) {
         {post.photos && <PhotoGrid photos={post.photos} post={post} />}
         <div className="mx-4 mt-2 border-t border-[#ced0d4] grid grid-cols-3 py-1 text-fb-sub font-semibold text-[15px]">
           <ReactButton LikeIcon={I.Like} />
-          <button onClick={() => setCommentOpen((o) => !o)} className="h-9 rounded-md hover:bg-fb-hover flex items-center justify-center gap-2"><I.Comment size={20} />Comment</button>
+          <button onClick={() => input.current?.focus()} className="h-9 rounded-md hover:bg-fb-hover flex items-center justify-center gap-2"><I.Comment size={20} />Comment</button>
           <button onClick={copyLink} className="h-9 rounded-md hover:bg-fb-hover flex items-center justify-center gap-2"><I.Share size={20} />Share</button>
         </div>
-        <form onSubmit={send} className="flex items-center gap-2 px-4 pb-3 pt-1">
-          <Avatar size={32} />
-          <input value={text} onChange={(e) => setText(e.target.value)} autoFocus={commentOpen} placeholder="Write a comment..." className="flex-1 h-9 rounded-full bg-fb-bg px-3 text-[15px] outline-none focus:ring-2 focus:ring-fb-blue/40" />
+        <Comments list={list} save={saveComments} />
+        <form onSubmit={send} className="flex items-center gap-2 px-4 pb-3 pt-2">
+          <GuestAvatar />
+          <input ref={input} value={text} onChange={(e) => setText(e.target.value)} placeholder="Write a comment..." className="flex-1 h-9 rounded-full bg-fb-bg px-3 text-[15px] outline-none focus:ring-2 focus:ring-fb-blue/40" />
           {text.trim() && <button className="text-fb-blue font-semibold text-[15px]">Send</button>}
         </form>
       </article>
