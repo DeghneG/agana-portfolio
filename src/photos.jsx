@@ -163,6 +163,7 @@ export function Lightbox() {
             {photos.length > 1 && `Photo ${index + 1} of ${photos.length}`}
           </div>
         </div>
+        {ph.desc && <p className="px-4 pt-3 text-[14px] leading-snug whitespace-pre-line overflow-y-auto">{ph.desc}</p>}
         {ph.href && (
           <div className="px-4 pt-3">
             <a href={ph.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 h-9 px-3 rounded-md bg-fb-blue text-white font-semibold text-[15px] hover:brightness-95">{ph.hrefLabel || 'Open in Google Drive'} ↗</a>

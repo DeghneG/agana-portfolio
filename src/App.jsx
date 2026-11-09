@@ -13,6 +13,8 @@ const PRELIM = [
   { src: '/mml/prelim-1.jpg', label: 'UniLend', href: UNILEND, hrefLabel: 'Open in Canva' },
   { src: '/mml/uniserve-logo.png', label: 'UniServe: United to Serve' },
   { src: '/mml/bandlab.png', label: 'BandLab' },
+  { src: '/mml/dreamcatch.jpg', label: 'DreamCatch Campaign Document Layout',
+    desc: 'DreamCatch: Record, Replay and Watch your dream when you wake up.\n\nTarget audience: creatives, writers, vivid dreamers, and Gen Z/Millennial users who love sharing unique personal dreams.\n\nCore message: "Don\'t Let Your Dreams Disappear."\n\nMultimedia matrix: text, graphics/images, audio, video, and animation/interactivity.\n\nMedium deliberately excluded: camera-based night tracking, medical sleep diagnostics, and auto-publishing to public feeds, to protect user privacy.' },
 ]
 const MIDTERM = [
   { src: '/mml/midterm-1.png', label: 'SPARC Agana Infographics' },
