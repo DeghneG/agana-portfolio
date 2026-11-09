@@ -8,6 +8,11 @@ import { ReactButton, ReactionDefs, ReactionIcon } from './reactions'
 
 import { openLightbox, PhotoGrid, Lightbox, Placeholder, Media } from './photos'
 const VOXPOP = 'https://drive.google.com/drive/folders/1bm8Vd7Vs6M1Ly5LtBYJHR4ogylO8cDbY'
+const UNILEND = 'https://www.canva.com/design/DAHQKDVJc8A/LmIrZ2O591E-loZNgTnwzA/edit'
+const PRELIM = [
+  { src: '/mml/prelim-1.jpg', label: 'UniLend', href: UNILEND, hrefLabel: 'Open in Canva' },
+  { src: '/mml/uniserve-logo.png', label: 'UniServe: United to Serve' },
+]
 const MIDTERM = [
   { src: '/mml/midterm-1.png', label: 'SPARC Agana Infographics' },
   { src: '/mml/midterm-2.jpg', label: 'King in the making' },
@@ -18,7 +23,7 @@ const FINALS = [
   { src: '/mml/finals-1.mp4', video: true, label: 'Desktop 2026.11.08 - 16.15.32.01' },
   { src: '/mml/stop-motion.mp4', video: true, label: 'Stop Motion Video' },
 ]
-const MML_MEDIA = { Midterm: MIDTERM, Finals: FINALS }
+const MML_MEDIA = { Prelim: PRELIM, Midterm: MIDTERM, Finals: FINALS }
 const mmlPhotos = (t) => Array.from({ length: t === 'Midterm' ? MIDTERM.length : 11 }, (_, k) => (
   MML_MEDIA[t]?.[k] ?? { label: `${t} · Photo ${k + 1}` }
 ))
@@ -315,6 +320,7 @@ function buildPosts() {
         {p.repo && <><br /><a className="text-fb-blue hover:underline" href={p.repo} target="_blank" rel="noreferrer">{p.repo.replace('https://', '')}</a></>}</>) })),
     ...['Prelim', 'Midterm', 'Finals'].map((t) => ({ id: `mml-${t.toLowerCase()}`, type: 'mml', title: t, date: `2026 · MML Project`, photos: mmlPhotos(t),
       body: (<><b>{t}</b> <span className="text-fb-sub">— MML Project, 2026</span>
+        {t === 'Prelim' && <><br /><a className="text-fb-blue hover:underline" href={UNILEND} target="_blank" rel="noreferrer">UniLend (Canva)</a><br /><span>UniServe: <i>United to Serve</i></span></>}
         {t === 'Midterm' && <><br /><a className="text-fb-blue hover:underline" href={VOXPOP} target="_blank" rel="noreferrer">MML VOX POP Project (Google Drive)</a></>}</>) })),
     { id: 'cert', type: 'cert', title: cert.t, date: `${cert.y} · Certification`, href: cert.href, body: (<>🏆 Earned <b>{cert.t}</b> from {cert.by} (Certificate No. {cert.no}). <a className="text-fb-blue" href={cert.href} target="_blank" rel="noreferrer">View certificate</a></>) },
   ]
