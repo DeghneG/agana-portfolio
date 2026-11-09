@@ -12,6 +12,7 @@ const UNILEND = 'https://www.canva.com/design/DAHQKDVJc8A/LmIrZ2O591E-loZNgTnwzA
 const PRELIM = [
   { src: '/mml/prelim-1.jpg', label: 'UniLend', href: UNILEND, hrefLabel: 'Open in Canva' },
   { src: '/mml/uniserve-logo.png', label: 'UniServe: United to Serve' },
+  { src: '/mml/bandlab.png', label: 'BandLab' },
 ]
 const MIDTERM = [
   { src: '/mml/midterm-1.png', label: 'SPARC Agana Infographics' },
