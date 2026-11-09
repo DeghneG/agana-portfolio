@@ -28,7 +28,7 @@ const FINALS = [
   { src: '/mml/stop-motion.mp4', video: true, label: 'Stop Motion Video' },
 ]
 const MML_MEDIA = { Prelim: PRELIM, Midterm: MIDTERM, Finals: FINALS }
-const mmlPhotos = (t) => Array.from({ length: t === 'Midterm' ? MIDTERM.length : t === 'Prelim' ? PRELIM.length : 11 }, (_, k) => (
+const mmlPhotos = (t) => Array.from({ length: MML_MEDIA[t].length }, (_, k) => (
   MML_MEDIA[t]?.[k] ?? { label: `${t} · Photo ${k + 1}` }
 ))
 const projectPhotos =projects.map((p) => ({ src: p.img, label: p.title }))
